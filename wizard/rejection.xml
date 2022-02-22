@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<odoo>
+        <record id="rejection_view_form" model="ir.ui.view">
+            <field name="name">crm.lead.lost.form</field>
+            <field name="model">purchase.request.rejection</field>
+            <field name="arch" type="xml">
+                <form string="Rejection Reason">
+                    <group class="oe_title">
+                        <field name="reason" invisible="1"/>
+                        <field name="rejection"/>
+                    </group>
+                    <footer>
+                        <button name="saveReason" string="submit" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="purchase_rejection_reason_action" model="ir.actions.act_window">
+            <field name="name">Rejection Reason</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">purchase.request.rejection</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="rejection_view_form"/>
+            <field name="target">new</field>
+        </record>
+</odoo>

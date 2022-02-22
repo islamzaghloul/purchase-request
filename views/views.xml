@@ -1,0 +1,97 @@
+<odoo>
+<record id="purchase_request_tree" model="ir.ui.view">
+        <field name="name">purchase.request.tree</field>
+        <field name="model">purchase.request</field>
+        <field name="arch" type="xml">
+                <tree>
+                            <field name="Request_name"/>
+                            <field name="Requested_by"/>
+<!--                            <field name="order_lines"/>-->
+                            <field name="Status"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="Rejection_reason"/>
+                            <field name="Total_price"/>
+                </tree>
+        </field>
+    </record>
+
+    <record id="request_form" model="ir.ui.view">
+        <field name="name">purchase.request.form</field>
+        <field name="model">purchase.request</field>
+        <field name="arch" type="xml">
+            <form string="purchase Request">
+                <header>
+                    <button name="action_draft" type="object" string="reset to draft" attrs="{'invisible': [ ('Status','!=', 'reject')]}" class="oe_highlight"/>
+                    <button name="action_tobe" type="object" string="submit for approval" attrs="{'invisible': [ ('Status','!=', 'draft')]}" class="oe_highlight"/>
+                    <button name="action_approve" type="object" string="approve" attrs="{'invisible': [ ('Status','!=', 'to_be_approved')]}" class="oe_highlight"/>
+                    <button name="%(purchase_request.purchase_rejection_reason_action)d" type="action" string="reject" attrs="{'invisible': [ ('Status','!=', 'to_be_approved')]}" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="cancel" attrs="{'invisible': [ ('Status','!=', 'draft')]}" class="oe_highlight"/>
+                    <field name="Status" widget="statusbar" statusbar_visible="draft,to_be_approved,approve,reject,cancel"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="Request_name" string="Request name"/>
+                            <field name="Requested_by" string="Requested by"/>
+<!--                            <field name="Status" readonly="1"/>-->
+                        </group>
+
+                        <group>
+                            <field name="start_date" string="Start Date"/>
+                            <field name="end_date" string="End Date"/>
+                            <field name="Total_price"/>
+                        </group>
+                    </group>
+                            <notebook>
+                                <page name="Purchase Request Lines" string="Purchase Request Lines">
+                                    <group>
+                                        <field name="order_lines" string="orders">
+                                                <tree editable="1">
+                                                    <field name="product_id" string="product"/>
+                                                    <field name="description" />
+                                                    <field name="quantity" type="numeric"/>
+                                                    <field name="cost_price" string="cost per one" readonly="0"/>
+                                                    <field name="Total" readonly="0"/>
+                                                </tree>
+                                        </field>
+                                    </group>
+                                </page>
+                            </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="line_form" model="ir.ui.view">
+        <field name="name">purchase.request.line.form</field>
+        <field name="model">purchase.request.lines</field>
+        <field name="arch" type="xml">
+            <form string="orders">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id" string="product"/>
+                            <field name="description"/>
+                            <field name="quantity"/>
+                        </group>
+
+                        <group>
+                            <field name="cost_price" string="cost price"/>
+                            <field name="Total"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="purchase_request_action" model="ir.actions.act_window">
+        <field name="name">purchase.request</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">purchase.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Purchase Request" id="purchase_request_custom_menu" parent="purchase.menu_procurement_management"
+              action="purchase_request_action"/>
+</odoo>
